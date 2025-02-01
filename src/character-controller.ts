@@ -1,8 +1,34 @@
-// character-controller.js
 import * as THREE from "three";
 
+type Controls = {
+  target: THREE.Vector3;
+};
+
+type Keys = {
+  forward: boolean;
+  backward: boolean;
+  left: boolean;
+  right: boolean;
+};
+
 export class CharacterController {
-  constructor(model, camera, controls, terrain) {
+  private model: THREE.Object3D;
+  private camera: THREE.Camera;
+  private controls: Controls;
+  private terrain: THREE.Object3D;
+  private moveDirection: THREE.Vector3;
+  private moveSpeed: number;
+  private keys: Keys;
+  private gravity: number;
+  private verticalVelocity: number;
+  private canJump: boolean;
+
+  constructor(
+    model: THREE.Object3D,
+    camera: THREE.Camera,
+    controls: Controls,
+    terrain: THREE.Object3D
+  ) {
     this.model = model;
     this.camera = camera;
     this.controls = controls;
@@ -23,7 +49,7 @@ export class CharacterController {
     document.addEventListener("keyup", (event) => this.handleKeyUp(event));
   }
 
-  handleKeyDown(event) {
+  private handleKeyDown(event: KeyboardEvent): void {
     switch (event.code) {
       case "KeyW":
         this.keys.forward = true;
@@ -46,7 +72,7 @@ export class CharacterController {
     }
   }
 
-  handleKeyUp(event) {
+  private handleKeyUp(event: KeyboardEvent): void {
     switch (event.code) {
       case "KeyW":
         this.keys.forward = false;
@@ -63,7 +89,7 @@ export class CharacterController {
     }
   }
 
-  update() {
+  public update(): void {
     this.moveDirection.set(0, 0, 0);
 
     if (this.keys.forward) this.moveDirection.z = -1;
@@ -111,9 +137,7 @@ export class CharacterController {
 
     if (intersects.length > 0) {
       const intersectionPoint = intersects[0].point;
-
       const targetY = intersectionPoint.y + 0.7;
-
       const yDifference = targetY - this.model.position.y;
 
       if (Math.abs(yDifference) > 0.05) {

@@ -1,5 +1,4 @@
 import * as THREE from "three";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { CharacterController } from "./character-controller";
 import {
@@ -21,18 +20,28 @@ createLights(scene);
 camera.position.set(0, 10, 20);
 controls.target.set(0, 0, 0);
 
-const terrain = await createTerrain(scene);
-const model = await loadCharacterModel("/character.glb", scene);
-const characterController = new CharacterController(
-  model,
-  camera,
-  controls,
-  terrain
-);
+let terrain: THREE.Mesh | undefined; // Explicitly type terrain
+let model: THREE.Group | undefined; // Explicitly type model
+let characterController: CharacterController | undefined; // Explicitly type characterController
 
-console.log("Terrain and model loaded!");
+async function initialize() {
+  terrain = await createTerrain(scene);
+  model = await loadCharacterModel("/character.glb", scene);
 
-animate();
+  if (model && terrain) {
+    characterController = new CharacterController(
+      model,
+      camera,
+      controls,
+      terrain
+    );
+  } else {
+    console.error("Failed to load terrain or model.");
+  }
+
+  console.log("Terrain and model loaded!");
+  animate();
+}
 
 function animate() {
   requestAnimationFrame(animate);
@@ -46,3 +55,5 @@ function animate() {
 }
 
 document.body.appendChild(renderer.domElement);
+
+initialize(); // Call the initialization function
