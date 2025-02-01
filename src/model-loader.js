@@ -11,7 +11,7 @@ export function loadCharacterModel(modelPath, scene) {
         const model = gltf.scene;
         model.scale.set(0.5, 0.5, 0.5);
 
-        const mesh = model.getObjectByName("Root_Scene"); // Replace with your mesh's name
+        const mesh = model.getObjectByName("Root_Scene");
         if (mesh) {
           mesh.rotation.y += Math.PI / 2;
         } else {
@@ -20,7 +20,7 @@ export function loadCharacterModel(modelPath, scene) {
         }
 
         scene.add(model);
-        resolve(model); // Resolve the promise with the loaded model
+        resolve(model);
       },
       (xhr) => {
         if (xhr.lengthComputable) {
@@ -29,7 +29,7 @@ export function loadCharacterModel(modelPath, scene) {
         }
       },
       (error) => {
-        reject(error); // Reject the promise if there's an error
+        reject(error);
       }
     );
   });

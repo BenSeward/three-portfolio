@@ -26,16 +26,3 @@ export function createLights(scene) {
   const ambientLight = new THREE.AmbientLight(0xffffff, 1);
   scene.add(ambientLight);
 }
-
-export function createGrid(scene) {
-  const gridSize = 100;
-  const gridDivisions = 10;
-  const gridHelper = new THREE.GridHelper(
-    gridSize,
-    gridDivisions,
-    0x008000,
-    0x008000
-  );
-  gridHelper.position.y = -0.1;
-  scene.add(gridHelper);
-}

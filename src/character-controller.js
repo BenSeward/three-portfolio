@@ -1,10 +1,12 @@
+// character-controller.js
 import * as THREE from "three";
 
 export class CharacterController {
-  constructor(model, camera, controls) {
+  constructor(model, camera, controls, terrain) {
     this.model = model;
     this.camera = camera;
     this.controls = controls;
+    this.terrain = terrain;
     this.moveDirection = new THREE.Vector3();
     this.moveSpeed = 0.1;
     this.keys = {
@@ -13,6 +15,9 @@ export class CharacterController {
       left: false,
       right: false,
     };
+    this.gravity = -0.05;
+    this.verticalVelocity = 0;
+    this.canJump = false;
 
     document.addEventListener("keydown", (event) => this.handleKeyDown(event));
     document.addEventListener("keyup", (event) => this.handleKeyUp(event));
@@ -31,6 +36,12 @@ export class CharacterController {
         break;
       case "KeyD":
         this.keys.right = true;
+        break;
+      case "Space":
+        if (this.canJump) {
+          this.verticalVelocity = 0.5;
+          this.canJump = false;
+        }
         break;
     }
   }
@@ -71,7 +82,7 @@ export class CharacterController {
         this.moveDirection.x,
         this.moveDirection.z
       );
-      this.model.rotation.y = targetRotation; // Only the movement rotation now
+      this.model.rotation.y = targetRotation;
 
       const cameraOffset = new THREE.Vector3(0, 2, 5);
       const targetCameraPosition = new THREE.Vector3()
@@ -85,6 +96,45 @@ export class CharacterController {
         this.model.position.y + 1,
         this.model.position.z
       );
+    }
+
+    const raycaster = new THREE.Raycaster(
+      new THREE.Vector3(
+        this.model.position.x,
+        this.model.position.y + 1,
+        this.model.position.z
+      ),
+      new THREE.Vector3(0, -1, 0)
+    );
+
+    const intersects = raycaster.intersectObject(this.terrain);
+
+    if (intersects.length > 0) {
+      const intersectionPoint = intersects[0].point;
+
+      const targetY = intersectionPoint.y + 0.7;
+
+      const yDifference = targetY - this.model.position.y;
+
+      if (Math.abs(yDifference) > 0.05) {
+        this.model.position.y += yDifference * 0.2;
+        this.verticalVelocity = 0;
+        this.canJump = false;
+      } else {
+        this.model.position.y = targetY;
+        this.verticalVelocity = 0;
+        this.canJump = true;
+      }
+    } else {
+      this.verticalVelocity += this.gravity;
+      this.model.position.y += this.verticalVelocity;
+      this.canJump = false;
+    }
+
+    if (this.model.position.y < -10) {
+      this.model.position.set(0, 2, 0);
+      this.verticalVelocity = 0;
+      this.canJump = true;
     }
   }
 }

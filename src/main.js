@@ -7,37 +7,33 @@ import {
   createCamera,
   createRenderer,
   createLights,
-  createGrid,
 } from "./scene-setup";
 import { loadCharacterModel } from "./model-loader";
+import { createTerrain } from "./terrain-generator";
 
-// Initialize core components
 const scene = createScene();
 const camera = createCamera();
 const renderer = createRenderer();
-document.body.appendChild(renderer.domElement);
-
 const controls = new OrbitControls(camera, renderer.domElement);
+
 createLights(scene);
-createGrid(scene);
 
-// Model Loading and Character Controller
-let characterController;
+camera.position.set(0, 10, 20);
+controls.target.set(0, 0, 0);
 
-loadCharacterModel("/character.glb", scene)
-  .then((characterModel) => {
-    characterController = new CharacterController(
-      characterModel,
-      camera,
-      controls
-    );
-    console.log("Model loaded and controller initialized!");
-  })
-  .catch((error) => {
-    console.error("Error loading model:", error);
-  });
+const terrain = await createTerrain(scene);
+const model = await loadCharacterModel("/character.glb", scene);
+const characterController = new CharacterController(
+  model,
+  camera,
+  controls,
+  terrain
+);
 
-// Animation loop
+console.log("Terrain and model loaded!");
+
+animate();
+
 function animate() {
   requestAnimationFrame(animate);
 
@@ -49,4 +45,4 @@ function animate() {
   renderer.render(scene, camera);
 }
 
-animate();
+document.body.appendChild(renderer.domElement);
