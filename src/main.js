@@ -3,6 +3,7 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { CharacterController } from "./character-controller";
 
+// Scene, Camera, Renderer setup
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
   75,
@@ -11,20 +12,24 @@ const camera = new THREE.PerspectiveCamera(
   1000
 );
 camera.position.set(0, 2, 5);
+
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
 renderer.setClearColor(0xadd8e6);
+document.body.appendChild(renderer.domElement);
 
+// Orbit Controls setup
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.target.set(0, 0, 0);
 controls.enablePan = true;
 controls.enableZoom = true;
 controls.enableRotate = true;
 
-const light = new THREE.AmbientLight(0xffffff, 1);
-scene.add(light);
+// Lighting
+const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+scene.add(ambientLight);
 
+// Grid Helper
 const gridSize = 100;
 const gridDivisions = 10;
 const gridHelper = new THREE.GridHelper(
@@ -36,24 +41,25 @@ const gridHelper = new THREE.GridHelper(
 gridHelper.position.y = -0.1;
 scene.add(gridHelper);
 
+// Model Loading and Character Controller
 let characterModel;
 let characterController;
 
-const loader = new GLTFLoader();
-loader.load(
+const gltfLoader = new GLTFLoader();
+
+gltfLoader.load(
   "/character.glb",
-  function (gltf) {
+  (gltf) => {
     characterModel = gltf.scene;
     characterModel.scale.set(0.5, 0.5, 0.5);
 
-    // *** The REAL fix: Rotate the mesh within the model ***
+    // Rotate the mesh within the model (Corrected and improved)
     const mesh = characterModel.getObjectByName("YourMeshName"); // ***REPLACE "YourMeshName"***
     if (mesh) {
-      mesh.rotation.y += Math.PI / 2; // Or -Math.PI/2, or Math.PI, or -Math.PI as needed
+      mesh.rotation.y += Math.PI / 2;
     } else {
       console.error("Mesh not found! Check the name.");
-      // If the mesh isn't found, you can log the entire model to the console
-      console.log(characterModel); //Inspect in browser console to find mesh name
+      console.log(characterModel); // Inspect in browser console to find mesh name
     }
 
     scene.add(characterModel);
@@ -64,12 +70,19 @@ loader.load(
     );
     console.log("Model loaded successfully!");
   },
-  undefined,
-  function (error) {
+  (xhr) => {
+    // Optional: Add a loading progress callback
+    if (xhr.lengthComputable) {
+      const percentComplete = (xhr.loaded / xhr.total) * 100;
+      console.log(Math.round(percentComplete, 2) + "% downloaded");
+    }
+  },
+  (error) => {
     console.error("Error loading model:", error);
   }
 );
 
+// Animation loop
 function animate() {
   requestAnimationFrame(animate);
 
