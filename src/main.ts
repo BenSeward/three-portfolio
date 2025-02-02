@@ -8,9 +8,7 @@ import {
   createLights,
 } from "./scene-setup";
 import { loadCharacterModel } from "./character-loader";
-import { createTerrain } from "./flat-terrain";
-import { loadHouseModel } from "./house-loader";
-import { loadTreeModel } from "./tree-loader";
+import { loadVillageModel } from "./village-loader";
 
 const scene = createScene();
 const camera = createCamera();
@@ -22,41 +20,45 @@ createLights(scene);
 camera.position.set(0, 40, 50);
 controls.target.set(0, 0, 0);
 
-let terrain: THREE.Mesh | undefined; // Explicitly type terrain
-let model: THREE.Group | undefined; // Explicitly type model
-let characterController: CharacterController | undefined; // Explicitly type characterController
+let model: THREE.Group | undefined;
+let characterController: CharacterController | undefined;
+let villageGround: THREE.Mesh | undefined;
 
 async function initialize() {
-  terrain = await createTerrain(scene);
-  model = await loadCharacterModel("/character.glb", scene);
+  try {
+    const village = await loadVillageModel(scene);
+    model = await loadCharacterModel("/character.glb", scene);
 
-  await loadHouseModel("/house.glb", scene, 10, 0, 10, 0, -10);
-  await loadHouseModel("/huts.glb", scene, 7, 30, -5, 0, -12);
+    if (!model) {
+      console.error("Failed to load character model.");
+      return;
+    }
 
-  await loadHouseModel("/trees-cut.glb", scene, 5, 17, 3, 0, -15);
+    villageGround = village.children[0].children[0].children.find(
+      (child) => child.name === "Object_13"
+    ) as THREE.Mesh | undefined; // ***REPLACE "Ground" with the actual name***
 
-  await loadTreeModel("/pine-trees.glb", scene, -25, 0, -10);
-  await loadTreeModel("/pine-trees.glb", scene, -25, 0, 10);
-  await loadTreeModel("/pine-trees.glb", scene, -5, 0, 20);
-  await loadTreeModel("/pine-trees.glb", scene, 25, 0, 20);
-  await loadTreeModel("/pine-trees.glb", scene, 30, 0, -15);
-  await loadTreeModel("/pine-trees.glb", scene, 25, 0, -35);
-  await loadTreeModel("/pine-trees.glb", scene, 5, 0, -35);
-  await loadTreeModel("/pine-trees.glb", scene, -25, 0, -30);
+    if (!villageGround) {
+      console.error("Ground mesh not found in village model!");
+      return;
+    }
 
-  if (model && terrain) {
-    characterController = new CharacterController(
-      model,
-      camera,
-      controls,
-      terrain
-    );
-  } else {
-    console.error("Failed to load terrain or model.");
+    if (model && villageGround) {
+      characterController = new CharacterController(
+        model,
+        camera,
+        controls,
+        villageGround
+      );
+    } else {
+      console.error("Failed to load village or model.");
+    }
+
+    console.log("Village and model loaded!");
+    animate();
+  } catch (error) {
+    console.error("Error during initialization:", error);
   }
-
-  console.log("Terrain and model loaded!");
-  animate();
 }
 
 function animate() {
@@ -72,4 +74,4 @@ function animate() {
 
 document.body.appendChild(renderer.domElement);
 
-initialize(); // Call the initialization function
+initialize();

@@ -9,6 +9,7 @@ type Keys = {
   backward: boolean;
   left: boolean;
   right: boolean;
+  space: boolean; // Add space for jumping
 };
 
 export class CharacterController {
@@ -40,6 +41,7 @@ export class CharacterController {
       backward: false,
       left: false,
       right: false,
+      space: false, // Initialize space key
     };
     this.gravity = -0.05;
     this.verticalVelocity = 0;
@@ -63,11 +65,8 @@ export class CharacterController {
       case "KeyD":
         this.keys.right = true;
         break;
-      case "Space":
-        if (this.canJump) {
-          this.verticalVelocity = 0.5;
-          this.canJump = false;
-        }
+      case "Space": // Handle jump key down
+        this.keys.space = true;
         break;
     }
   }
@@ -85,6 +84,9 @@ export class CharacterController {
         break;
       case "KeyD":
         this.keys.right = false;
+        break;
+      case "Space": // Handle jump key up
+        this.keys.space = false;
         break;
     }
   }
@@ -119,7 +121,7 @@ export class CharacterController {
       this.controls.target.copy(this.model.position);
       this.camera.lookAt(
         this.model.position.x,
-        this.model.position.y + 1,
+        this.model.position.y + 10, // Look slightly above the character
         this.model.position.z
       );
     }
@@ -127,21 +129,21 @@ export class CharacterController {
     const raycaster = new THREE.Raycaster(
       new THREE.Vector3(
         this.model.position.x,
-        this.model.position.y + 1,
+        this.model.position.y + 10,
         this.model.position.z
       ),
       new THREE.Vector3(0, -1, 0)
     );
 
-    const intersects = raycaster.intersectObject(this.terrain);
+    const intersects = raycaster.intersectObject(this.terrain, true);
 
     if (intersects.length > 0) {
       const intersectionPoint = intersects[0].point;
-      const targetY = intersectionPoint.y + 0.7;
+      const targetY = intersectionPoint.y + 0.7; // Adjust offset as needed
       const yDifference = targetY - this.model.position.y;
 
       if (Math.abs(yDifference) > 0.05) {
-        this.model.position.y += yDifference * 0.2;
+        this.model.position.y += yDifference * 0.2; // Smooth movement
         this.verticalVelocity = 0;
         this.canJump = false;
       } else {
@@ -153,6 +155,13 @@ export class CharacterController {
       this.verticalVelocity += this.gravity;
       this.model.position.y += this.verticalVelocity;
       this.canJump = false;
+    }
+
+    // Jumping logic (using the space key)
+    if (this.keys.space && this.canJump) {
+      this.verticalVelocity = 0.5; // Adjust jump height
+      this.canJump = false;
+      this.keys.space = false; // Prevent continuous jumping while holding space
     }
 
     if (this.model.position.y < -10) {
