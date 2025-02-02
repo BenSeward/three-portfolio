@@ -45,7 +45,7 @@ export class CharacterController {
     };
     this.gravity = -0.05;
     this.verticalVelocity = 0;
-    this.canJump = false;
+    this.canJump = true;
 
     document.addEventListener("keydown", (event) => this.handleKeyDown(event));
     document.addEventListener("keyup", (event) => this.handleKeyUp(event));

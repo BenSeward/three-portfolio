@@ -13,6 +13,7 @@ export function loadCharacterModel(
       (gltf) => {
         const model: THREE.Group = gltf.scene; // Type the model
         model.scale.set(0.5, 0.5, 0.5);
+        model.position.set(-85, 1.6, 2.1);
 
         const mesh = model.getObjectByName("Root_Scene");
         if (mesh instanceof THREE.Mesh) {
