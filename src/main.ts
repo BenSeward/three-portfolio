@@ -1,5 +1,4 @@
 import * as THREE from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { CharacterController } from "./character-controller";
 import {
   createScene,
@@ -13,12 +12,8 @@ import { loadVillageModel } from "./village-loader";
 const scene = createScene();
 const camera = createCamera();
 const renderer = createRenderer();
-const controls = new OrbitControls(camera, renderer.domElement);
 
 createLights(scene);
-
-camera.position.set(0, 40, 50);
-controls.target.set(0, 0, 0);
 
 let model: THREE.Group | undefined;
 let characterController: CharacterController | undefined;
@@ -47,7 +42,6 @@ async function initialize() {
       characterController = new CharacterController(
         model,
         camera,
-        controls,
         villageGround
       );
     } else {
@@ -68,7 +62,6 @@ function animate() {
     characterController.update();
   }
 
-  controls.update();
   renderer.render(scene, camera);
 }
 

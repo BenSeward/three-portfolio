@@ -15,7 +15,6 @@ type Keys = {
 export class CharacterController {
   private model: THREE.Object3D;
   private camera: THREE.Camera;
-  private controls: Controls;
   private terrain: THREE.Object3D;
   private moveDirection: THREE.Vector3;
   private moveSpeed: number;
@@ -27,12 +26,10 @@ export class CharacterController {
   constructor(
     model: THREE.Object3D,
     camera: THREE.Camera,
-    controls: Controls,
     terrain: THREE.Object3D
   ) {
     this.model = model;
     this.camera = camera;
-    this.controls = controls;
     this.terrain = terrain;
     this.moveDirection = new THREE.Vector3();
     this.moveSpeed = 0.1;
@@ -94,38 +91,48 @@ export class CharacterController {
   public update(): void {
     this.moveDirection.set(0, 0, 0);
 
-    if (this.keys.forward) this.moveDirection.z = -1;
-    if (this.keys.backward) this.moveDirection.z = 1;
-    if (this.keys.left) this.moveDirection.x = -1;
-    if (this.keys.right) this.moveDirection.x = 1;
+    if (this.keys.forward) this.moveDirection.z = 1; // W is forward
+    if (this.keys.backward) this.moveDirection.z = -1; // S is backward
 
     this.moveDirection.normalize();
 
     if (this.moveDirection.length() > 0) {
+      // Apply character's rotation to movement (for W/S movement)
+      this.moveDirection.applyQuaternion(this.model.quaternion);
       this.model.position.add(
         this.moveDirection.multiplyScalar(this.moveSpeed)
       );
-
-      const targetRotation = Math.atan2(
-        this.moveDirection.x,
-        this.moveDirection.z
-      );
-      this.model.rotation.y = targetRotation;
-
-      const cameraOffset = new THREE.Vector3(0, 2, 5);
-      const targetCameraPosition = new THREE.Vector3()
-        .copy(this.model.position)
-        .add(cameraOffset);
-
-      this.camera.position.lerp(targetCameraPosition, 0.1);
-      this.controls.target.copy(this.model.position);
-      this.camera.lookAt(
-        this.model.position.x,
-        this.model.position.y + 10, // Look slightly above the character
-        this.model.position.z
-      );
     }
 
+    // Rotation with A and D
+    let rotationAngle = 0;
+    if (this.keys.left) rotationAngle += 0.05;
+    if (this.keys.right) rotationAngle -= 0.05;
+
+    this.model.rotation.y += rotationAngle;
+
+    // Camera positioning and look-at
+    const cameraDistance = 5;
+    const cameraHeight = 3;
+
+    const cameraTargetOffset = new THREE.Vector3(
+      0,
+      cameraHeight,
+      -cameraDistance
+    );
+    cameraTargetOffset.applyQuaternion(this.model.quaternion);
+
+    const cameraTargetPosition = new THREE.Vector3()
+      .copy(this.model.position)
+      .add(cameraTargetOffset);
+
+    this.camera.position.lerp(cameraTargetPosition, 0.1);
+
+    const lookAtPosition = new THREE.Vector3().copy(this.model.position);
+    lookAtPosition.y += 1;
+    this.camera.lookAt(lookAtPosition);
+
+    // Ground collision detection
     const raycaster = new THREE.Raycaster(
       new THREE.Vector3(
         this.model.position.x,
@@ -139,11 +146,11 @@ export class CharacterController {
 
     if (intersects.length > 0) {
       const intersectionPoint = intersects[0].point;
-      const targetY = intersectionPoint.y + 0.7; // Adjust offset as needed
+      const targetY = intersectionPoint.y + 0.7;
       const yDifference = targetY - this.model.position.y;
 
       if (Math.abs(yDifference) > 0.05) {
-        this.model.position.y += yDifference * 0.2; // Smooth movement
+        this.model.position.y += yDifference * 0.2;
         this.verticalVelocity = 0;
         this.canJump = false;
       } else {
@@ -157,15 +164,15 @@ export class CharacterController {
       this.canJump = false;
     }
 
-    // Jumping logic (using the space key)
+    // Jumping logic
     if (this.keys.space && this.canJump) {
-      this.verticalVelocity = 0.5; // Adjust jump height
+      this.verticalVelocity = 0.5;
       this.canJump = false;
-      this.keys.space = false; // Prevent continuous jumping while holding space
+      this.keys.space = false;
     }
 
     if (this.model.position.y < -10) {
-      this.model.position.set(0, 2, 0);
+      this.model.position.set(-85, 1.6, 2.1); // Reset to original starting position
       this.verticalVelocity = 0;
       this.canJump = true;
     }

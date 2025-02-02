@@ -21,7 +21,6 @@ export function loadCharacterModel(
           mesh.rotation.y += Math.PI / 2;
         } else {
           console.error("Mesh not found or is not a Mesh! Check the name.");
-          console.log(model);
         }
 
         scene.add(model);
