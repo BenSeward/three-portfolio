@@ -8,10 +8,13 @@ import {
 } from "./scene-setup";
 import { loadCharacterModel } from "./character-loader";
 import { loadVillageModel } from "./village-loader";
+import { createLowPolyOcean } from "./ocean";
+// import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 const scene = createScene();
 const camera = createCamera();
 const renderer = createRenderer();
+// const controls = new OrbitControls(camera, renderer.domElement);
 
 createLights(scene);
 
@@ -23,6 +26,7 @@ async function initialize() {
   try {
     const village = await loadVillageModel(scene);
     model = await loadCharacterModel("/character.glb", scene);
+    createLowPolyOcean(scene, renderer, camera);
 
     if (!model) {
       console.error("Failed to load character model.");
@@ -57,6 +61,8 @@ async function initialize() {
 
 function animate() {
   requestAnimationFrame(animate);
+
+  // controls.update();
 
   if (characterController) {
     characterController.update();
