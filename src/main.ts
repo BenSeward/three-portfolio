@@ -31,7 +31,7 @@ async function initialize() {
 
     villageGround = village.children[0].children[0].children.find(
       (child) => child.name === "Object_13"
-    ) as THREE.Mesh | undefined; // ***REPLACE "Ground" with the actual name***
+    ) as THREE.Mesh;
 
     if (!villageGround) {
       console.error("Ground mesh not found in village model!");

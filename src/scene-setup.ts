@@ -1,7 +1,9 @@
 import * as THREE from "three";
 
 export function createScene(): THREE.Scene {
-  return new THREE.Scene();
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x87ceeb);
+  return scene;
 }
 
 export function createCamera(): THREE.PerspectiveCamera {
@@ -11,35 +13,43 @@ export function createCamera(): THREE.PerspectiveCamera {
     0.1,
     1000
   );
-  camera.position.set(0, 2, 5);
+  camera.position.set(0, 5, 10);
   return camera;
 }
 
 export function createRenderer(): THREE.WebGLRenderer {
-  const renderer = new THREE.WebGLRenderer();
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setClearColor(0xadd8e6);
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.shadowMap.enabled = true;
   return renderer;
 }
 
 export function createLights(scene: THREE.Scene): void {
-  // 1. Ambient Light (Less yellow, brighter)
-  const ambientLight = new THREE.AmbientLight(0xf8f8ff, 0.8); // Very slightly blueish, increased intensity
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.4); // Slightly reduced ambient light
   scene.add(ambientLight);
 
-  // 2. Directional Light (Less yellow, brighter, higher position)
-  const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5); // Pure white, very bright
-  directionalLight.position.set(8, 8, 8); // Higher position for softer shadows
-  directionalLight.castShadow = true;
+  // Sun (using a DirectionalLight)
+  const sunLight = new THREE.DirectionalLight(0xffffe0, 1); // Warm yellowish light for the sun
+  sunLight.position.set(20, 30, -10); // Position the sun (adjust as needed)
+  sunLight.castShadow = true;
 
-  scene.add(directionalLight);
+  sunLight.shadow.mapSize.width = 4096;
+  sunLight.shadow.mapSize.height = 4096;
+  sunLight.shadow.camera.near = 0.1;
+  sunLight.shadow.camera.far = 100; // Increased far plane for the sun's light
+  sunLight.shadow.bias = -0.0005;
 
-  directionalLight.shadow.mapSize.width = 2048;
-  directionalLight.shadow.mapSize.height = 2048;
-  directionalLight.shadow.camera.near = 0.01;
-  directionalLight.shadow.camera.far = 1000;
+  scene.add(sunLight);
 
-  // 3. Hemisphere Light (More blue sky, less green ground)
-  const hemisphereLight = new THREE.HemisphereLight(0xadd8e6, 0xb0c4de, 1.0); // Light blue sky, light steel blue ground
+  // Hemisphere Light (Adjusted to complement the sun)
+  const hemisphereLight = new THREE.HemisphereLight(0xbbd4ff, 0x99aaaf, 0.4); // Adjusted intensity
   scene.add(hemisphereLight);
+
+  // Optional: Add a visual representation of the sun (a sphere)
+  const sunGeometry = new THREE.SphereGeometry(3, 32, 32); // Radius, width segments, height segments
+  const sunMaterial = new THREE.MeshBasicMaterial({ color: 0xffffd0 }); // Slightly less intense yellow
+  const sun = new THREE.Mesh(sunGeometry, sunMaterial);
+  sun.position.copy(sunLight.position); // Position the sphere at the light's position
+  scene.add(sun);
 }
