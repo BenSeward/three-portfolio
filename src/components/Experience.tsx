@@ -44,13 +44,6 @@ export const Experience = () => {
           position={[0.75, 0, 1.5]} // Position of the NPC
           initialRotation={[0, Math.PI, 0]}
         />
-
-        <NPC
-          animation="idle" // Animation to play
-          scale={0.18}
-          position={[5, 0, 6]}
-          initialRotation={[0, -Math.PI / 2, 0]}
-        />
       </Physics>
     </>
   );
