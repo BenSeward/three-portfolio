@@ -39,4 +39,4 @@ export const ChatBubble = forwardRef<ExtendedGroup>((_, ref) => {
   );
 });
 
-useGLTF.preload("/chat-bubble-v2.glb");
+useGLTF.preload("/models/chat-bubble-v2.glb");

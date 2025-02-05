@@ -1,46 +1,22 @@
-import React, { useRef, useEffect } from "react";
-import { useGLTF, useAnimations, Clone } from "@react-three/drei";
+import React, { useRef } from "react";
 import { RigidBody } from "@react-three/rapier";
 import { useFrame, useThree } from "@react-three/fiber";
 import { ChatBubble } from "./ChatBubble";
 import { Group, MathUtils, Vector3 } from "three";
 import { useDialogStore } from "../store/dialog-store";
-
-interface NPCProps {
-  animation: string;
-  scale: number | [number, number, number];
-  position: [number, number, number];
-  initialRotation: [number, number, number];
-}
+import { NewNPC } from "./NewNPC";
 
 export interface ExtendedGroup extends Group {
   isActive: boolean;
 }
 
-export const NPC: React.FC<NPCProps> = ({ animation, ...props }) => {
-  const group = useRef<Group>(null);
+export const NPC: React.FC = () => {
+  const group = useRef<ExtendedGroup>(null);
   const chatBubbleRef = useRef<ExtendedGroup>(null);
   const { setDialog } = useDialogStore();
-
-  const model = useGLTF("/models/npc.glb");
-  const { actions } = useAnimations(model.animations, group);
   const { scene } = useThree();
 
   const activationDistance = 1;
-
-  useEffect(() => {
-    if (!animation || !actions || !actions[animation]) {
-      console.warn(`Animation "${animation}" not found in model.`);
-      return;
-    }
-
-    const animAction = actions[animation];
-    animAction.reset().fadeIn(0.24).play();
-
-    return () => {
-      animAction?.fadeOut(0.24);
-    };
-  }, [animation, actions]);
 
   useFrame(() => {
     if (!group.current || !chatBubbleRef.current) return;
@@ -102,14 +78,9 @@ export const NPC: React.FC<NPCProps> = ({ animation, ...props }) => {
         }
       >
         <ChatBubble ref={chatBubbleRef} />
+
         <RigidBody type="dynamic" density={50} lockRotations={true}>
-          <Clone
-            ref={group}
-            object={model.scene}
-            scale={props.scale}
-            position={props.position}
-            rotation={props.initialRotation}
-          />
+          <NewNPC ref={group} scale={0.18} position={[0.75, 0, 1.5]} />
         </RigidBody>
       </group>
     </>

@@ -14,8 +14,8 @@ export const DialogBox = () => {
         <span className="dialog-close" onClick={() => setDialog([])}>
           X
         </span>
-        {dialog.map((item) => (
-          <WavyText text={item} />
+        {dialog.map((item, index) => (
+          <WavyText key={index} text={item} />
         ))}
       </div>
     </>
