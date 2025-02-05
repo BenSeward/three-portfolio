@@ -1,29 +1,26 @@
 import { useGLTF } from "@react-three/drei";
 import { UseGLTF } from "../types/use-gltf";
-import { useSpring, animated } from "@react-spring/three";
-import { useEffect } from "react";
+import { forwardRef } from "react";
 
 interface ChatBubbleProps {
   isActive: boolean;
 }
 
-export function ChatBubble({ isActive }: ChatBubbleProps) {
-  const { nodes, materials } = useGLTF("/models/speech_bubble.glb") as UseGLTF;
-  const { scale } = useSpring({ scale: isActive ? 0.5 : 0.2 });
-
-  useEffect(() => console.log(isActive), [isActive]);
+export const ChatBubble = forwardRef((props: ChatBubbleProps, ref: any) => {
+  const { nodes } = useGLTF("/models/chat-bubble-v2.glb") as UseGLTF;
 
   return (
-    <group dispose={null}>
-      <mesh
-        geometry={nodes.Object_2.geometry}
-        material={materials["Scene_-_Root"]}
-        rotation={[Math.PI, 0, 0]}
-        scale={0.2}
-        position={[-1.25, 7.5, 0]}
-      />
+    <group ref={ref} dispose={null}>
+      <group scale={0.01}>
+        <mesh
+          geometry={nodes.Plane003_Plane005.geometry}
+          material={nodes.Plane003_Plane005.material}
+          position={[109.144, 38.224, -0.833]}
+          scale={[34.96, 41.072, 42.3]}
+        />
+      </group>
     </group>
   );
-}
+});
 
-useGLTF.preload("/speech_bubble.glb");
+useGLTF.preload("/chat-bubble-v2.glb");

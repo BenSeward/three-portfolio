@@ -84,7 +84,7 @@ export const NPC: React.FC<NPCProps> = ({ animation, ...props }) => {
 
     chatBubbleRef.current.position.set(
       npcPosition.x,
-      npcPosition.y + 0.5,
+      npcPosition.y + 0.65,
       npcPosition.z
     );
 
@@ -98,14 +98,7 @@ export const NPC: React.FC<NPCProps> = ({ animation, ...props }) => {
   return (
     <>
       <group>
-        {/* <ChatBubble isActive={isActive} /> */}
-        <Rectangle3D
-          ref={chatBubbleRef}
-          width={0.25}
-          height={0.125}
-          depth={0.025}
-          color="red"
-        />
+        <ChatBubble ref={chatBubbleRef} isActive={true} />
         <RigidBody type="dynamic" density={50} lockRotations={true}>
           <Clone
             ref={group}
@@ -119,23 +112,3 @@ export const NPC: React.FC<NPCProps> = ({ animation, ...props }) => {
     </>
   );
 };
-
-// function Rectangle3D({
-//   ref,
-//   width = 2,
-//   height = 1,
-//   depth = 0.05,
-//   color = "blue",
-//   position = new THREE.Vector3(0, -3, 0),
-// }: any) {
-//   return (
-
-//   );
-// }
-
-const Rectangle3D = React.forwardRef((props: any, ref: any) => (
-  <mesh ref={ref}>
-    <boxGeometry args={[props.width, props.height, props.depth]} />
-    <meshStandardMaterial color={props.color} />
-  </mesh>
-));

@@ -29,7 +29,7 @@ export const Experience = () => {
           attach={"shadow-camera"}
         />
       </directionalLight>
-      <Physics key={"medieval_village"}>
+      <Physics debug key={"medieval_village"}>
         <Map
           scale={0.125}
           position={[-1.5, -4, 2]}
