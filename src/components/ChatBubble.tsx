@@ -21,8 +21,6 @@ export const ChatBubble = forwardRef<ExtendedGroup>((_, ref) => {
     if (!ref.current.isActive && isActive) {
       setIsActive(false);
     }
-
-    console.log("ref: ", ref.current.isActive);
   });
 
   return (

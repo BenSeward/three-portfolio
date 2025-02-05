@@ -4,6 +4,7 @@ import { RigidBody } from "@react-three/rapier";
 import { useFrame, useThree } from "@react-three/fiber";
 import { ChatBubble } from "./ChatBubble";
 import { Group, MathUtils, Vector3 } from "three";
+import { useDialogStore } from "../store/dialog-store";
 
 interface NPCProps {
   animation: string;
@@ -19,6 +20,7 @@ export interface ExtendedGroup extends Group {
 export const NPC: React.FC<NPCProps> = ({ animation, ...props }) => {
   const group = useRef<Group>(null);
   const chatBubbleRef = useRef<ExtendedGroup>(null);
+  const { setDialog } = useDialogStore();
 
   const model = useGLTF("/models/npc.glb");
   const { actions } = useAnimations(model.animations, group);
@@ -92,7 +94,13 @@ export const NPC: React.FC<NPCProps> = ({ animation, ...props }) => {
 
   return (
     <>
-      <group>
+      <group
+        onClick={() =>
+          setDialog([
+            "Hi there! We're still building here but feel free to look around!",
+          ])
+        }
+      >
         <ChatBubble ref={chatBubbleRef} />
         <RigidBody type="dynamic" density={50} lockRotations={true}>
           <Clone
