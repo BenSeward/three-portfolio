@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useMemo } from "react";
+import React, { useRef, useEffect } from "react";
 import { useGLTF, useAnimations, Clone } from "@react-three/drei";
 import { RigidBody } from "@react-three/rapier";
 import { useFrame, useThree } from "@react-three/fiber";
@@ -16,10 +16,6 @@ export const NPC: React.FC<NPCProps> = ({ animation, ...props }) => {
   const group = useRef<THREE.Group>(null!);
   const chatBubbleRef = useRef<THREE.Group>(null!);
   const activateNPCRef = useRef(false);
-  const isActive = useMemo(
-    () => activateNPCRef.current,
-    [activateNPCRef.current]
-  );
 
   const model = useGLTF("/models/npc.glb");
   const { actions } = useAnimations(model.animations, group);
