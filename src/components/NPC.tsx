@@ -2,8 +2,8 @@ import React, { useRef, useEffect } from "react";
 import { useGLTF, useAnimations, Clone } from "@react-three/drei";
 import { RigidBody } from "@react-three/rapier";
 import { useFrame, useThree } from "@react-three/fiber";
-import * as THREE from "three"; // Import Three.js
 import { ChatBubble } from "./ChatBubble";
+import { Group, MathUtils, Vector3 } from "three";
 
 interface NPCProps {
   animation: string;
@@ -12,10 +12,13 @@ interface NPCProps {
   initialRotation: [number, number, number];
 }
 
+export interface ExtendedGroup extends Group {
+  isActive: boolean;
+}
+
 export const NPC: React.FC<NPCProps> = ({ animation, ...props }) => {
-  const group = useRef<THREE.Group>(null!);
-  const chatBubbleRef = useRef<THREE.Group>(null!);
-  const activateNPCRef = useRef(false);
+  const group = useRef<Group>(null);
+  const chatBubbleRef = useRef<ExtendedGroup>(null);
 
   const model = useGLTF("/models/npc.glb");
   const { actions } = useAnimations(model.animations, group);
@@ -38,7 +41,7 @@ export const NPC: React.FC<NPCProps> = ({ animation, ...props }) => {
   }, [animation, actions]);
 
   useFrame(() => {
-    if (!group.current) return;
+    if (!group.current || !chatBubbleRef.current) return;
 
     let character: THREE.Object3D | undefined;
 
@@ -50,33 +53,19 @@ export const NPC: React.FC<NPCProps> = ({ animation, ...props }) => {
 
     if (!character) return;
 
-    const npcPosition = new THREE.Vector3();
-    const characterPosition = new THREE.Vector3();
+    const npcPosition = new Vector3();
+    const characterPosition = new Vector3();
 
     group.current.getWorldPosition(npcPosition);
     character.getWorldPosition(characterPosition);
 
-    if (npcPosition.distanceTo(characterPosition) > activationDistance) {
-      activateNPCRef.current = false;
-      return;
-    }
+    chatBubbleRef.current.isActive = false;
 
-    activateNPCRef.current = true;
-
-    const direction = new THREE.Vector3()
+    const direction = new Vector3()
       .subVectors(characterPosition, npcPosition)
       .normalize();
 
     const targetRotation = Math.atan2(direction.x, direction.z);
-
-    group.current.rotation.y = THREE.MathUtils.lerp(
-      group.current.rotation.y,
-      targetRotation,
-      0.1
-    );
-
-    // chat bubble
-    if (!chatBubbleRef.current) return;
 
     chatBubbleRef.current.position.set(
       npcPosition.x,
@@ -84,7 +73,17 @@ export const NPC: React.FC<NPCProps> = ({ animation, ...props }) => {
       npcPosition.z
     );
 
-    chatBubbleRef.current.rotation.y = THREE.MathUtils.lerp(
+    chatBubbleRef.current.rotation.y = MathUtils.lerp(
+      group.current.rotation.y,
+      targetRotation,
+      0.1
+    );
+
+    if (npcPosition.distanceTo(characterPosition) > activationDistance) return;
+
+    chatBubbleRef.current.isActive = true;
+
+    group.current.rotation.y = MathUtils.lerp(
       group.current.rotation.y,
       targetRotation,
       0.1
@@ -94,7 +93,7 @@ export const NPC: React.FC<NPCProps> = ({ animation, ...props }) => {
   return (
     <>
       <group>
-        <ChatBubble ref={chatBubbleRef} isActive={true} />
+        <ChatBubble ref={chatBubbleRef} />
         <RigidBody type="dynamic" density={50} lockRotations={true}>
           <Clone
             ref={group}
