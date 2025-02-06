@@ -2,10 +2,12 @@ import { create } from "zustand";
 
 interface DialogState {
   dialog: Array<string>;
-  setDialog: (dialog: Array<string>) => void;
+  author: string;
+  setDialog: ({ dialog, author }: { dialog: string[]; author: string }) => void;
 }
 
 export const useDialogStore = create<DialogState>((set) => ({
   dialog: [],
-  setDialog: (update) => set(() => ({ dialog: update })),
+  author: "",
+  setDialog: ({ dialog, author }) => set(() => ({ dialog, author })),
 }));

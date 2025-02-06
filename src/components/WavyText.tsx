@@ -48,18 +48,52 @@ export const WavyText: FC<Props> = ({
     },
   };
 
+  function arraysAreEqual(arr1: string[], arr2: string[]) {
+    if (arr1.length !== arr2.length) {
+      return false; // Different lengths, can't be equal
+    }
+    return arr1.every((val) => arr2.includes(val));
+  }
+
+  const arrOfWords: Array<Array<string>> = [[]];
+
+  letters.forEach((item) => {
+    if (item !== " ") {
+      const lastArrIsSpace = arraysAreEqual(arrOfWords[arrOfWords.length - 1], [
+        " ",
+      ]);
+
+      if (lastArrIsSpace) {
+        arrOfWords.push([item]);
+      } else {
+        arrOfWords[arrOfWords.length - 1].push(item);
+      }
+    } else {
+      arrOfWords.push([" "]);
+    }
+  });
+
   return (
     <motion.span
-      style={{ display: "flex" }}
+      className="dialog-text"
+      style={{ wordWrap: "break-word" }}
       variants={container}
       initial="hidden"
       animate={replay ? "visible" : "hidden"}
       {...props}
     >
-      {letters.map((letter, index) => (
-        <motion.span key={index} variants={child} className="animated-letter">
-          {letter === " " ? "\u00A0" : letter}
-        </motion.span>
+      {arrOfWords.map((wordArr, index) => (
+        <p key={index}>
+          {wordArr.map((letter, index) => (
+            <motion.span
+              key={index}
+              variants={child}
+              className="animated-letter"
+            >
+              {letter === " " ? "\u00A0" : letter}
+            </motion.span>
+          ))}
+        </p>
       ))}
     </motion.span>
   );

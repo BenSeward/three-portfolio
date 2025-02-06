@@ -77,9 +77,13 @@ export const NPC: React.FC<Props> = ({ position, rotation }) => {
     <>
       <group
         onClick={() =>
-          setDialog([
-            "Hi there! Our creator is still building here but feel free to look around!",
-          ])
+          setDialog({
+            author: "Victor",
+            dialog: [
+              "Welcome, traveller! This island is full of adventure, surprises, and maybe even a few hidden treasures...",
+              "So wander around, chat with the locals, and find out more about our creator Ben!",
+            ],
+          })
         }
       >
         <ChatBubble ref={chatBubbleRef} />

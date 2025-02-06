@@ -1,4 +1,4 @@
-# React Three Fiber Interactive Portfolio
+# Interactive Game Portfolio
 
 <img src="src/docs/screenshot.png" alt="screenshot" width="100%" />
 
@@ -27,6 +27,10 @@ This is the repo for my interactive open world portfolio project. It is built wi
 - Design game controls UI
 - Add onboarding section to show users controls
 - Title screen
+
+### Bugs
+
+- Character shouldn't move when clicked buttons or controls
 
 # Storyline
 
