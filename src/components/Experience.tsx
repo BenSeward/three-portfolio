@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { NPC } from "./NPC";
 import { Map } from "./Map";
 import { CharacterController } from "./CharacterController";
+import { Euler, Vector3 } from "three";
 
 export const Experience = () => {
   const shadowCameraRef = useRef();
@@ -38,7 +39,14 @@ export const Experience = () => {
 
         <CharacterController />
 
-        <NPC />
+        <NPC
+          position={new Vector3(0.75, 0, 1.5)}
+          rotation={new Euler(0, Math.PI, 0)}
+        />
+        <NPC
+          position={new Vector3(4.5, 0, 5.5)}
+          rotation={new Euler(0, -Math.PI / 2, 0)}
+        />
       </Physics>
     </>
   );

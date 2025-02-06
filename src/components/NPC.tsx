@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { RigidBody } from "@react-three/rapier";
 import { useFrame, useThree } from "@react-three/fiber";
 import { ChatBubble } from "./ChatBubble";
-import { Group, MathUtils, Vector3 } from "three";
+import { Euler, Group, MathUtils, Vector3 } from "three";
 import { useDialogStore } from "../store/dialog-store";
 import { NewNPC } from "./NewNPC";
 
@@ -10,7 +10,12 @@ export interface ExtendedGroup extends Group {
   isActive: boolean;
 }
 
-export const NPC: React.FC = () => {
+interface Props {
+  position: Vector3;
+  rotation: Euler;
+}
+
+export const NPC: React.FC<Props> = ({ position, rotation }) => {
   const group = useRef<ExtendedGroup>(null);
   const chatBubbleRef = useRef<ExtendedGroup>(null);
   const { setDialog } = useDialogStore();
@@ -80,7 +85,12 @@ export const NPC: React.FC = () => {
         <ChatBubble ref={chatBubbleRef} />
 
         <RigidBody type="dynamic" density={50} lockRotations={true}>
-          <NewNPC ref={group} scale={0.18} position={[0.75, 0, 1.5]} />
+          <NewNPC
+            ref={group}
+            scale={0.18}
+            position={position}
+            rotation={rotation}
+          />
         </RigidBody>
       </group>
     </>

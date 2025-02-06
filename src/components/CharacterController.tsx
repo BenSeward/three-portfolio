@@ -2,7 +2,7 @@
 import { useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { CapsuleCollider, RigidBody } from "@react-three/rapier";
-import { useControls } from "leva";
+import { Leva, useControls } from "leva";
 import { useEffect, useRef, useState } from "react";
 import { MathUtils, Vector3 } from "three";
 import { degToRad } from "three/src/math/MathUtils.js";
@@ -195,6 +195,7 @@ export const CharacterController = () => {
 
   return (
     <>
+      <Leva hidden />
       <RigidBody ref={rb} colliders={false} mass={5} lockRotations={true}>
         <group ref={container}>
           <group ref={cameraTarget} position-z={1.5} />
