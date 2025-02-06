@@ -16,28 +16,26 @@ export const DialogBox = () => {
   };
 
   return (
-    <>
-      <div className="dialog-box">
-        <span className="dialog-author">{author}:</span>
-        <span className="dialog-close" onClick={() => closeDialog()}>
-          <CrossIcon width={10} color="#ffffff" />
+    <div className="dialog-box">
+      <span className="dialog-author">{author}:</span>
+      <span className="dialog-close" onClick={() => closeDialog()}>
+        <CrossIcon width={10} color="#ffffff" />
+      </span>
+
+      {dialog.map((item, index) => {
+        if (index !== currentDialogStep - 1) return null;
+
+        return <WavyText text={item} />;
+      })}
+
+      {currentDialogStep < dialog.length && (
+        <span
+          className="dialog-next"
+          onClick={() => setCurrentDialogStep(currentDialogStep + 1)}
+        >
+          <SingleArrowDownIcon width={10} />
         </span>
-
-        {dialog.map((item, index) => {
-          if (index !== currentDialogStep - 1) return null;
-
-          return <WavyText text={item} />;
-        })}
-
-        {currentDialogStep < dialog.length && (
-          <span
-            className="dialog-next"
-            onClick={() => setCurrentDialogStep(currentDialogStep + 1)}
-          >
-            <SingleArrowDownIcon width={10} />
-          </span>
-        )}
-      </div>
-    </>
+      )}
+    </div>
   );
 };

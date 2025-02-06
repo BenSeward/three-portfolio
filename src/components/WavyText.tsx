@@ -50,8 +50,9 @@ export const WavyText: FC<Props> = ({
 
   function arraysAreEqual(arr1: string[], arr2: string[]) {
     if (arr1.length !== arr2.length) {
-      return false; // Different lengths, can't be equal
+      return false;
     }
+
     return arr1.every((val) => arr2.includes(val));
   }
 
