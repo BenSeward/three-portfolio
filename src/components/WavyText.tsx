@@ -11,7 +11,7 @@ interface Props extends HTMLMotionProps<"div"> {
 export const WavyText: FC<Props> = ({
   text,
   delay = 0,
-  duration = 0.025,
+  duration = 0.005,
   replay = true,
   ...props
 }: Props) => {
@@ -33,16 +33,16 @@ export const WavyText: FC<Props> = ({
       y: 0,
       transition: {
         type: "spring",
-        damping: 12,
+        damping: 10,
         stiffness: 200,
       },
     },
     hidden: {
       opacity: 0,
-      y: 20,
+      y: 40,
       transition: {
         type: "spring",
-        damping: 12,
+        damping: 10,
         stiffness: 200,
       },
     },
@@ -50,7 +50,7 @@ export const WavyText: FC<Props> = ({
 
   return (
     <motion.span
-      style={{ display: "flex", overflow: "hidden" }}
+      style={{ display: "flex" }}
       variants={container}
       initial="hidden"
       animate={replay ? "visible" : "hidden"}

@@ -2,51 +2,36 @@
 
 <img src="src/docs/screenshot.png" alt="screenshot" width="100%" />
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the repo for my interactive open world portfolio project. It is built with React Three Fiber and the Rapier physics engine. The goal is for users to walk around the map to find out different pieces of infermation about me.
 
-Currently, two official plugins are available:
+# Roadmap
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Player Character
 
-## Expanding the ESLint configuration
+- Import model ✅
+- Add character controller to move and rotate player ✅
+- Add physics engine and collision detection ✅
+- Add player dialog box
+- Pan camera to first person when talking to NPC
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### Map
 
-- Configure the top-level `parserOptions` property like this:
+- Import map model ✅
+- Add water
+- Add sounds when walking on different meshes
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-});
-```
+### Misc
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+- Add music to game
+- Add map for users to find their way round
+- Design game controls UI
+- Add onboarding section to show users controls
+- Title screen
 
-```js
-// eslint.config.js
-import react from "eslint-plugin-react";
+# Storyline
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: "18.3" } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs["jsx-runtime"].rules,
-  },
-});
-```
+This area needs work, but the idea right now is to keep it simple and just have a few NPC's someone can interact with to find out more information about you. I've listed these below but they need more information.
+
+- Work experience (Sportsshoes, Money supermarket, Awaze)
+- Personal - Love hiking, being in my van.
+- Contact information

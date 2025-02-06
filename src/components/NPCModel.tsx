@@ -11,7 +11,7 @@ import { SkeletonUtils } from "three-stdlib";
 import { UseGLTF } from "../types/use-gltf";
 import { ExtendedGroup } from "./NPC";
 
-export const NewNPC = forwardRef<ExtendedGroup, any>((props, ref) => {
+export const NPCModel = forwardRef<ExtendedGroup, any>((props, ref) => {
   const { scene, animations } = useGLTF("/models/npc.glb") as UseGLTF;
   const { actions } = useAnimations(animations, ref as any);
   const clone = React.useMemo(() => SkeletonUtils.clone(scene), [scene]);

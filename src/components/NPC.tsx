@@ -4,7 +4,7 @@ import { useFrame, useThree } from "@react-three/fiber";
 import { ChatBubble } from "./ChatBubble";
 import { Euler, Group, MathUtils, Vector3 } from "three";
 import { useDialogStore } from "../store/dialog-store";
-import { NewNPC } from "./NewNPC";
+import { NPCModel } from "./NPCModel";
 
 export interface ExtendedGroup extends Group {
   isActive: boolean;
@@ -85,7 +85,7 @@ export const NPC: React.FC<Props> = ({ position, rotation }) => {
         <ChatBubble ref={chatBubbleRef} />
 
         <RigidBody type="dynamic" density={50} lockRotations={true}>
-          <NewNPC
+          <NPCModel
             ref={group}
             scale={0.18}
             position={position}
