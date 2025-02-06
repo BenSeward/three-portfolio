@@ -78,7 +78,7 @@ export const NPC: React.FC<Props> = ({ position, rotation }) => {
       <group
         onClick={() =>
           setDialog([
-            "Hi there! We're still building here but feel free to look around!",
+            "Hi there! Our creator is still building here but feel free to look around!",
           ])
         }
       >
