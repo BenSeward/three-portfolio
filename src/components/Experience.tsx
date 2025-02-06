@@ -32,7 +32,7 @@ export const Experience = () => {
       </directionalLight>
       <Physics debug key={"medieval_village"}>
         <Map
-          scale={0.125}
+          scale={0.15}
           position={[-1.5, -4, 2]}
           model={`models/medieval_village.glb`}
         />
@@ -40,11 +40,11 @@ export const Experience = () => {
         <CharacterController />
 
         <NPC
-          position={new Vector3(0.75, 0, 1.5)}
+          position={new Vector3(1.25, 0, 1.5)}
           rotation={new Euler(0, Math.PI, 0)}
         />
         <NPC
-          position={new Vector3(4.5, 0, 5.5)}
+          position={new Vector3(6, 0, 6)}
           rotation={new Euler(0, -Math.PI / 2, 0)}
         />
       </Physics>
