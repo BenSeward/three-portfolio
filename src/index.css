@@ -22,7 +22,7 @@ body {
   color: #1e1e1e;
   display: flex;
   justify-content: center;
-  /* pointer-events: none; */
+  pointer-events: none;
   flex-direction: column;
 }
 
@@ -51,6 +51,8 @@ body {
   justify-content: center;
   padding: 10px;
   color: #ffffff;
+  pointer-events: all;
+  cursor: pointer;
 }
 
 .dialog-box .dialog-text {
@@ -74,6 +76,8 @@ body {
   justify-content: center;
   padding: 10px;
   color: #ffffff;
+  pointer-events: all;
+  cursor: pointer;
 }
 
 .dialog-box .animated-letter {
