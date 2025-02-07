@@ -18,14 +18,16 @@ I'm going to keep a list of everything that needs to be done here. For a more de
 ### Map
 
 - Import map model ✅
-- Add water
+- Add sounds when walking ✅
+- Import final map model
+- Add ocean water
 - Add sounds when walking on different meshes
 
 ### Misc
 
 - Design button UI ✅
-- Add buttons for UI (Sound / Map / Settings)
-- Add music to game
+- Add buttons for UI (Sound / Map / Settings) ✅
+- Add music to game ✅
 - Add map for users to find their way round
 - Add onboarding section to show users controls
 - Title screen
@@ -33,6 +35,8 @@ I'm going to keep a list of everything that needs to be done here. For a more de
 ### Bugs
 
 - Character shouldn't move when clicked buttons or controls
+- Fix dialog box on mobile
+- Fix sound on mobile
 
 # Storyline
 

@@ -6,7 +6,6 @@ import { Leva, useControls } from "leva";
 import { useEffect, useRef, useState } from "react";
 import { MathUtils, Vector3 } from "three";
 import { degToRad } from "three/src/math/MathUtils.js";
-import { useThree } from "@react-three/fiber";
 import { Character } from "./character";
 import { MovementAudio } from "../audio/movement-audio";
 
@@ -32,41 +31,20 @@ const lerpAngle = (start: any, end: any, t: any) => {
 };
 
 export const CharacterController = () => {
-  const {
-    WALK_SPEED,
-    RUN_SPEED,
-    ROTATION_SPEED,
-    CAMERA_LOOKAT_X,
-    CAMERA_LOOKAT_Y,
-    CAMERA_LOOKAT_Z,
-  } = useControls("Character Control", {
-    WALK_SPEED: { value: 1.4, min: 0.1, max: 4, step: 0.1 },
-    RUN_SPEED: { value: 2, min: 0.2, max: 12, step: 0.1 },
-    ROTATION_SPEED: {
-      value: degToRad(1),
-      min: degToRad(0.1),
-      max: degToRad(5),
-      step: degToRad(0.1),
-    },
-    CAMERA_LOOKAT_X: {
-      value: 0,
-      min: 0,
-      max: 100,
-      step: 0.25,
-    },
-    CAMERA_LOOKAT_Y: {
-      value: 0,
-      min: 0,
-      max: 100,
-      step: 0.25,
-    },
-    CAMERA_LOOKAT_Z: {
-      value: 0,
-      min: 0,
-      max: 100,
-      step: 0.25,
-    },
-  });
+  const { WALK_SPEED, RUN_SPEED, ROTATION_SPEED } = useControls(
+    "Character Control",
+    {
+      WALK_SPEED: { value: 1.4, min: 0.1, max: 4, step: 0.1 },
+      RUN_SPEED: { value: 2, min: 0.2, max: 12, step: 0.1 },
+      ROTATION_SPEED: {
+        value: degToRad(1),
+        min: degToRad(0.1),
+        max: degToRad(5),
+        step: degToRad(0.1),
+      },
+    }
+  );
+
   const rb = useRef<any>(null!);
   const container = useRef<any>(null);
   const character = useRef<any>(null);
@@ -82,27 +60,24 @@ export const CharacterController = () => {
   const cameraWorldPosition = useRef(new Vector3());
   const cameraLookAt = useRef(new Vector3());
   const [, get] = useKeyboardControls();
-  const test = useThree();
-
-  useEffect(() => {
-    test.camera.lookAt(
-      new Vector3(CAMERA_LOOKAT_X, CAMERA_LOOKAT_Y, CAMERA_LOOKAT_Z)
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [CAMERA_LOOKAT_X, CAMERA_LOOKAT_Y, CAMERA_LOOKAT_Z]);
 
   useEffect(() => {
     const onMouseDown = () => {
+      // @todo need to check here if whgere we are clicking is a button, dialog or npc
       isClicking.current = true;
     };
+
     const onMouseUp = () => {
       isClicking.current = false;
     };
+
     document.addEventListener("mousedown", onMouseDown);
     document.addEventListener("mouseup", onMouseUp);
+
     // touch
     document.addEventListener("touchstart", onMouseDown);
     document.addEventListener("touchend", onMouseUp);
+
     return () => {
       document.removeEventListener("mousedown", onMouseDown);
       document.removeEventListener("mouseup", onMouseUp);
