@@ -23,7 +23,8 @@ I'm going to keep a list of everything that needs to be done here. For a more de
 
 ### Misc
 
-- Design game controls UI
+- Design button UI ✅
+- Add buttons for UI (Sound / Map / Settings)
 - Add music to game
 - Add map for users to find their way round
 - Add onboarding section to show users controls

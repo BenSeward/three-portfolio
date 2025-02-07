@@ -2,6 +2,7 @@ import { KeyboardControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { Experience } from "./components/Experience";
 import { DialogBox } from "./components/DialogBox";
+import { SettingsControls } from "./components/settings-controls";
 
 const keyboardMap = [
   { name: "forward", keys: ["ArrowUp", "KeyW"] },
@@ -25,6 +26,7 @@ function App() {
         <Experience />
       </Canvas>
       <DialogBox />
+      <SettingsControls />
     </KeyboardControls>
   );
 }
