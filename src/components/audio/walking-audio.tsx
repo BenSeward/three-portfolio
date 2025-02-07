@@ -4,8 +4,8 @@ interface Props {
   status: string;
 }
 export const WalkingSound = ({ status }: Props) => {
-  const walkingAudio = useRef(new Audio("/sounds/walking.wav"));
-  const runningAudio = useRef(new Audio("/sounds/walking.wav"));
+  const walkingAudio = useRef(new Audio("/sounds/walking.mp3"));
+  const runningAudio = useRef(new Audio("/sounds/running.mp3"));
   const [hasInteracted, setHasInteracted] = useState(false);
 
   useEffect(() => {
@@ -36,11 +36,9 @@ export const WalkingSound = ({ status }: Props) => {
 
       if (status === "walk") {
         walkingAudio.current.loop = true;
-        walkingAudio.current.playbackRate = 1;
         await walkingAudio.current.play();
       } else if (status === "run") {
         runningAudio.current.loop = true;
-        runningAudio.current.playbackRate = 1.5;
         await runningAudio.current.play();
       }
     })();
