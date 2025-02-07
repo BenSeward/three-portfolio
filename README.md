@@ -41,3 +41,9 @@ This area needs work, but the idea right now is to keep it simple and just have 
 - Work experience (Sportsshoes, Money supermarket, Awaze)
 - Personal - Love hiking, being in my van.
 - Contact information
+
+# Credits
+
+- Ben Seward (Me) Developer
+- Remi (World modelling)
+- https://meydan.bandcamp.com/ (music)

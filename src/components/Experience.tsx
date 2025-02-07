@@ -5,6 +5,7 @@ import { NPC } from "./npc";
 import { CharacterController } from "./character/character-controller";
 import { Euler, Vector3 } from "three";
 import { Map } from "./map";
+import { BackgroundMusic } from "./audio/background-music";
 
 export const Experience = () => {
   const shadowCameraRef = useRef();
@@ -30,6 +31,9 @@ export const Experience = () => {
           attach={"shadow-camera"}
         />
       </directionalLight>
+
+      <BackgroundMusic />
+
       <Physics key={"medieval_village"}>
         <Map
           scale={0.15}

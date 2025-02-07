@@ -25,7 +25,7 @@ export const DialogBox = () => {
       {dialog.map((item, index) => {
         if (index !== currentDialogStep - 1) return null;
 
-        return <WavyText text={item} />;
+        return <WavyText key={index} text={item} />;
       })}
 
       {currentDialogStep < dialog.length && (
