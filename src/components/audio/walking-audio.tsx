@@ -1,59 +1,50 @@
-import { useEffect, useRef } from "react";
-import { useThree } from "@react-three/fiber";
-import { useAudioStore } from "../../store/audio-store";
-import * as THREE from "three";
+import { useRef, useEffect, useState } from "react";
 
 interface Props {
   status: string;
 }
 export const WalkingSound = ({ status }: Props) => {
-  const { camera } = useThree();
-  const { volume } = useAudioStore(); // Get walking status and volume from the store
-  const soundRef = useRef<THREE.Audio | null>(null);
+  const walkingAudio = useRef(new Audio("/sounds/walking.wav"));
+  const runningAudio = useRef(new Audio("/sounds/walking.wav"));
+  const [hasInteracted, setHasInteracted] = useState(false);
 
   useEffect(() => {
-    const listener = new THREE.AudioListener();
-    camera.add(listener);
+    const handleFirstInteraction = () => {
+      setHasInteracted(true);
+      window.removeEventListener("click", handleFirstInteraction);
+      window.removeEventListener("touchstart", handleFirstInteraction);
+    };
 
-    const sound = new THREE.Audio(listener);
-    const audioLoader = new THREE.AudioLoader();
-
-    audioLoader.load("/sounds/walking.wav", (buffer) => {
-      sound.setBuffer(buffer);
-      sound.setLoop(true);
-      sound.setVolume(0.2);
-      if (status !== "idle") {
-        sound.play();
-      }
-    });
-
-    soundRef.current = sound;
+    window.addEventListener("click", handleFirstInteraction);
+    window.addEventListener("touchstart", handleFirstInteraction);
 
     return () => {
-      sound.stop();
-      camera.remove(listener);
+      window.removeEventListener("click", handleFirstInteraction);
+      window.removeEventListener("touchstart", handleFirstInteraction);
     };
-  }, [camera]);
+  }, []);
 
-  // Handle play/pause based on walking status
   useEffect(() => {
-    if (soundRef.current) {
-      if (status !== "idle") {
-        if (!soundRef.current.isPlaying) {
-          soundRef.current.play();
-        }
-      } else {
-        soundRef.current.stop();
+    (async () => {
+      if (!hasInteracted) return;
+
+      await walkingAudio.current.pause();
+      await runningAudio.current.pause();
+
+      walkingAudio.current.currentTime = 0;
+      runningAudio.current.currentTime = 0;
+
+      if (status === "walk") {
+        walkingAudio.current.loop = true;
+        walkingAudio.current.playbackRate = 1;
+        await walkingAudio.current.play();
+      } else if (status === "run") {
+        runningAudio.current.loop = true;
+        runningAudio.current.playbackRate = 1.5;
+        await runningAudio.current.play();
       }
-    }
-  }, [status]);
-
-  // Adjust volume dynamically
-  useEffect(() => {
-    if (soundRef.current && volume === 0) {
-      soundRef.current.setVolume(volume);
-    }
-  }, [volume]);
+    })();
+  }, [status, hasInteracted]);
 
   return null;
 };
