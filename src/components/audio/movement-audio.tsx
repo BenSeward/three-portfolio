@@ -5,7 +5,7 @@ interface Props {
   status: string;
 }
 
-export const WalkingSound = ({ status }: Props) => {
+export const MovementAudio = ({ status }: Props) => {
   const walkingAudio = useRef(new Audio("/sounds/walking.mp3"));
   const runningAudio = useRef(new Audio("/sounds/running.mp3"));
   const { volume } = useAudioStore();
