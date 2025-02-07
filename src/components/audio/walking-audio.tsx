@@ -1,4 +1,5 @@
 import { useRef, useEffect, useState } from "react";
+import { useAudioStore } from "../../store/audio-store";
 
 interface Props {
   status: string;
@@ -7,6 +8,7 @@ interface Props {
 export const WalkingSound = ({ status }: Props) => {
   const walkingAudio = useRef(new Audio("/sounds/walking.mp3"));
   const runningAudio = useRef(new Audio("/sounds/running.mp3"));
+  const { volume } = useAudioStore();
   const [hasInteracted, setHasInteracted] = useState(false);
   const [previousStatus, setPreviousStatus] = useState<string | null>(null); // Store previous status
 
@@ -25,6 +27,16 @@ export const WalkingSound = ({ status }: Props) => {
       window.removeEventListener("touchstart", handleFirstInteraction);
     };
   }, []);
+
+  useEffect(() => {
+    if (volume === 0) {
+      walkingAudio.current.volume = 0;
+      runningAudio.current.volume = 0;
+    } else {
+      walkingAudio.current.volume = 0.5;
+      runningAudio.current.volume = 0.5;
+    }
+  }, [volume]);
 
   useEffect(() => {
     (async () => {

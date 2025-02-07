@@ -4,13 +4,13 @@ import { SettingsIcon } from "./icons/settings";
 import { VolumeIcon } from "./icons/volume";
 
 export const SettingsControls = () => {
-  const { toggleVolume } = useAudioStore();
+  const { volume, toggleVolume } = useAudioStore();
 
   return (
     <div className="settings-controls">
       <VolumeIcon
         width={30}
-        isMute={false}
+        isMute={volume === 0}
         color="white"
         onClick={() => toggleVolume()}
       />
