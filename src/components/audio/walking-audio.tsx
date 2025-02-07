@@ -1,4 +1,3 @@
-import { useFrame } from "@react-three/fiber";
 import { useRef, useEffect, useState } from "react";
 
 interface Props {
