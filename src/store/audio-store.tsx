@@ -6,7 +6,7 @@ interface DialogState {
 }
 
 export const useAudioStore = create<DialogState>((set) => ({
-  volume: 0.5,
+  volume: 0.1,
   toggleVolume: () =>
-    set((currentState) => ({ volume: currentState.volume ? 0 : 0.5 })),
+    set((currentState) => ({ volume: currentState.volume ? 0 : 0.1 })),
 }));

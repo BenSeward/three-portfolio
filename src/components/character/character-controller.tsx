@@ -8,6 +8,7 @@ import { MathUtils, Vector3 } from "three";
 import { degToRad } from "three/src/math/MathUtils.js";
 import { useThree } from "@react-three/fiber";
 import { Character } from "./character";
+import { WalkingSound } from "../audio/walking-audio";
 
 const normalizeAngle = (angle: number) => {
   while (angle > Math.PI) angle -= 2 * Math.PI;
@@ -196,6 +197,7 @@ export const CharacterController = () => {
   return (
     <>
       <Leva hidden />
+      <WalkingSound status={animation} />
       <RigidBody ref={rb} colliders={false} mass={5} lockRotations={true}>
         <group ref={container}>
           <group ref={cameraTarget} position-z={1.5} />
