@@ -1,6 +1,6 @@
 import { KeyboardControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import { Experience } from "./components/experience";
+import { Experience } from "./components/environment";
 import { DialogBox } from "./components/dialog-box";
 import { SettingsControls } from "./components/settings-controls";
 

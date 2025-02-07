@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { NPC } from "./npc";
 import { CharacterController } from "./character/character-controller";
 import { Euler, Vector3 } from "three";
-import { Map } from "./map";
+import { Map } from "./scene-map";
 import { BackgroundMusic } from "./audio/background-music";
 
 export const Experience = () => {
