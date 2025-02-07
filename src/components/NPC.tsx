@@ -21,7 +21,7 @@ export const NPC: React.FC<Props> = ({ position, rotation }) => {
   const { setDialog } = useDialogStore();
   const { scene } = useThree();
 
-  const activationDistance = 1;
+  const activationDistance = 2;
 
   useFrame(() => {
     if (!group.current || !chatBubbleRef.current) return;
