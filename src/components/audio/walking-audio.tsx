@@ -1,12 +1,15 @@
+import { useFrame } from "@react-three/fiber";
 import { useRef, useEffect, useState } from "react";
 
 interface Props {
   status: string;
 }
+
 export const WalkingSound = ({ status }: Props) => {
   const walkingAudio = useRef(new Audio("/sounds/walking.mp3"));
   const runningAudio = useRef(new Audio("/sounds/running.mp3"));
   const [hasInteracted, setHasInteracted] = useState(false);
+  const [previousStatus, setPreviousStatus] = useState<string | null>(null); // Store previous status
 
   useEffect(() => {
     const handleFirstInteraction = () => {
@@ -28,6 +31,8 @@ export const WalkingSound = ({ status }: Props) => {
     (async () => {
       if (!hasInteracted) return;
 
+      if (status === previousStatus) return; // Prevent restart if status hasn't changed
+
       await walkingAudio.current.pause();
       await runningAudio.current.pause();
 
@@ -41,8 +46,10 @@ export const WalkingSound = ({ status }: Props) => {
         runningAudio.current.loop = true;
         await runningAudio.current.play();
       }
+
+      setPreviousStatus(status); // Update previous status
     })();
-  }, [status, hasInteracted]);
+  }, [status, hasInteracted, previousStatus]); // Add previousStatus to dependency array
 
   return null;
 };
