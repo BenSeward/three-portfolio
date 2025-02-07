@@ -12,10 +12,7 @@ export const SettingsControls = () => {
         width={30}
         isMute={false}
         color="white"
-        onClick={() => {
-          console.log("clicking...");
-          toggleVolume();
-        }}
+        onClick={() => toggleVolume()}
       />
       <MapIcon width={30} color="white" />
       <SettingsIcon width={30} color="white" />
