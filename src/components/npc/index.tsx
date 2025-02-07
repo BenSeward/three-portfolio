@@ -1,10 +1,10 @@
 import React, { useRef } from "react";
 import { RigidBody } from "@react-three/rapier";
 import { useFrame, useThree } from "@react-three/fiber";
-import { ChatBubble } from "./ChatBubble";
 import { Euler, Group, MathUtils, Vector3 } from "three";
-import { useDialogStore } from "../store/dialog-store";
-import { NPCModel } from "./NPCModel";
+import { useDialogStore } from "../../store/dialog-store";
+import { NPCModel } from "./npc-model";
+import { ChatBubble } from "./chat-bubble";
 
 export interface ExtendedGroup extends Group {
   isActive: boolean;

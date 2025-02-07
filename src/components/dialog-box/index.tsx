@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { useDialogStore } from "../store/dialog-store";
+import { useDialogStore } from "../../store/dialog-store";
 import { WavyText } from "./WavyText";
-import { CrossIcon } from "./icons/close";
-import { SingleArrowDownIcon } from "./icons/single-arrow-down";
+import { CrossIcon } from "../icons/close";
+import { SingleArrowDownIcon } from "../icons/single-arrow-down";
 
 export const DialogBox = () => {
   const { dialog, author, setDialog } = useDialogStore();

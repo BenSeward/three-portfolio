@@ -1,7 +1,7 @@
 import { KeyboardControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import { Experience } from "./components/Experience";
-import { DialogBox } from "./components/DialogBox";
+import { Experience } from "./components/experience";
+import { DialogBox } from "./components/dialog-box";
 import { SettingsControls } from "./components/settings-controls";
 
 const keyboardMap = [

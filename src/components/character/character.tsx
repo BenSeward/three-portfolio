@@ -6,7 +6,7 @@ Command: npx gltfjsx@6.2.3 public/models/character.glb -o src/components/Charact
 
 import { useAnimations, useGLTF } from "@react-three/drei";
 import { PropsWithChildren, useEffect, useRef } from "react";
-import { UseGLTF } from "../types/use-gltf";
+import { UseGLTF } from "../../types/use-gltf";
 
 interface CharacterProps extends PropsWithChildren {
   animation: any;

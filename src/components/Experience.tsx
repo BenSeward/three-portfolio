@@ -1,10 +1,10 @@
 import { Environment, OrthographicCamera } from "@react-three/drei";
 import { Physics } from "@react-three/rapier";
 import { useRef } from "react";
-import { NPC } from "./NPC";
-import { Map } from "./Map";
-import { CharacterController } from "./CharacterController";
+import { NPC } from "./npc";
+import { CharacterController } from "./character/character-controller";
 import { Euler, Vector3 } from "three";
+import { Map } from "./map";
 
 export const Experience = () => {
   const shadowCameraRef = useRef();

@@ -1,7 +1,7 @@
 import { useGLTF } from "@react-three/drei";
-import { UseGLTF } from "../types/use-gltf";
+import { UseGLTF } from "../../types/use-gltf";
 import { forwardRef, useState } from "react";
-import { ExtendedGroup } from "./NPC";
+import { ExtendedGroup } from ".";
 import { useFrame } from "@react-three/fiber";
 import { animated, useSpring } from "@react-spring/three";
 

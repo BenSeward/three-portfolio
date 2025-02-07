@@ -8,8 +8,8 @@ import React, { forwardRef, useEffect } from "react";
 import { useGraph } from "@react-three/fiber";
 import { useAnimations, useGLTF } from "@react-three/drei";
 import { SkeletonUtils } from "three-stdlib";
-import { UseGLTF } from "../types/use-gltf";
-import { ExtendedGroup } from "./NPC";
+import { UseGLTF } from "../../types/use-gltf";
+import { ExtendedGroup } from ".";
 
 export const NPCModel = forwardRef<ExtendedGroup, any>((props, ref) => {
   const { scene, animations } = useGLTF("/models/npc.glb") as UseGLTF;
