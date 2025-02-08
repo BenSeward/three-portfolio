@@ -1,4 +1,4 @@
-import { Environment } from "@react-three/drei";
+import { Environment, OrbitControls } from "@react-three/drei";
 import { Physics } from "@react-three/rapier";
 
 import { NPC } from "./npc";
@@ -6,10 +6,21 @@ import { CharacterController } from "./character/character-controller";
 import { Euler, Vector3 } from "three";
 import { Map } from "./map";
 import { BackgroundMusic } from "./audio/background-music";
+import { IntroScene } from "./intro-scene";
+import { useState } from "react";
 
 export const Experience = () => {
+  const [isIntroScene, setIsIntroScene] = useState(true);
+
   return (
     <>
+      {isIntroScene && (
+        <>
+          <OrbitControls />
+          <IntroScene setIsIntroScene={() => setIsIntroScene(false)} />
+        </>
+      )}
+
       <Environment preset="sunset" />
 
       <BackgroundMusic />
@@ -17,11 +28,11 @@ export const Experience = () => {
       <Physics key={"medieval_village"}>
         <Map
           scale={0.15}
-          position={[-1.5, -4, 2]}
+          position={[0, -1, 0]}
           model={`models/medieval_village.glb`}
         />
 
-        <CharacterController />
+        <CharacterController followCharacter={!isIntroScene} />
 
         <NPC
           position={new Vector3(1.25, 0, 1.5)}

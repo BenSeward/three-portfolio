@@ -30,7 +30,11 @@ const lerpAngle = (start: any, end: any, t: any) => {
   return normalizeAngle(start + (end - start) * t);
 };
 
-export const CharacterController = () => {
+interface Props {
+  followCharacter: boolean;
+}
+
+export const CharacterController = ({ followCharacter }: Props) => {
   const { WALK_SPEED, RUN_SPEED, ROTATION_SPEED } = useControls(
     "Character Control",
     {
@@ -87,6 +91,8 @@ export const CharacterController = () => {
   }, []);
 
   useFrame(({ camera, mouse }) => {
+    if (!followCharacter) return;
+
     if (rb.current && character.current) {
       const vel = rb.current.linvel();
 
@@ -159,11 +165,11 @@ export const CharacterController = () => {
     );
 
     cameraPosition.current.getWorldPosition(cameraWorldPosition.current);
-    camera.position.lerp(cameraWorldPosition.current, 0.1);
+    camera.position.lerp(cameraWorldPosition.current, 0.2);
 
     if (cameraTarget.current) {
       cameraTarget.current.getWorldPosition(cameraLookAtWorldPosition.current);
-      cameraLookAt.current.lerp(cameraLookAtWorldPosition.current, 0.1);
+      cameraLookAt.current.lerp(cameraLookAtWorldPosition.current, 0.2);
 
       camera.lookAt(cameraLookAt.current);
     }
@@ -176,7 +182,7 @@ export const CharacterController = () => {
       <RigidBody ref={rb} colliders={false} mass={5} lockRotations={true}>
         <group ref={container}>
           <group ref={cameraTarget} position-z={1.5} />
-          <group ref={cameraPosition} position-y={4} position-z={-4} />
+          <group ref={cameraPosition} position-y={1.5} position-z={-1.5} />
           <group ref={character}>
             <Character scale={0.18} animation={animation} />
           </group>

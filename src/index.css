@@ -1,6 +1,7 @@
 #root {
   width: 100vw;
   height: 100vh;
+  font-family: "Grandstander", serif;
 }
 
 body {
@@ -9,7 +10,6 @@ body {
 
 .dialog-box {
   position: absolute;
-  font-family: "Grandstander", serif;
   padding: 40px;
   min-width: 320px;
   width: max-content;
@@ -96,4 +96,110 @@ body {
 
 .settings-controls svg {
   cursor: pointer;
+}
+
+.loading-scene-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #37726a;
+  opacity: 50%;
+}
+
+.loading-scene-transition-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: white;
+}
+
+.loading-scene-transition {
+  position: absolute;
+  bottom: -25%;
+  left: -50%;
+  width: 200%;
+  background-color: #37726a;
+  rotate: 20deg;
+  border-radius: 100%;
+}
+
+.loading-scene-transition-2 {
+  position: absolute;
+  bottom: -25%;
+  right: -50%;
+  width: 200%;
+  background-color: #55aca0;
+  rotate: -20deg;
+  border-radius: 100%;
+}
+
+.intro-scene-container {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) !important;
+  transition: all 0.5s ease-in-out;
+}
+
+.intro-scene-container img {
+  transition: all 0.5s ease-in-out;
+}
+
+.intro-scene-container h1 {
+  color: white;
+}
+
+.intro-scene img {
+  width: 300px;
+  margin-bottom: 40px;
+}
+
+.btn {
+  border: none;
+  background: none;
+  background-image: url(/images/dialog-author-bg.png);
+  background-size: 100% 100%;
+  color: #ffffff;
+  text-align: center;
+  padding: 25px 40px 20px;
+  font-family: "Grandstander", serif;
+  width: fit-content;
+  cursor: pointer;
+}
+
+.loading-bar-container {
+  height: 58px;
+  width: 100%;
+}
+
+.loading-bar {
+  padding: 10px;
+  background: #fefcd6;
+  position: relative;
+  border-radius: 6px;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 40px;
+  overflow: hidden;
+}
+
+.loading-bar span {
+  position: relative;
+}
+
+.loading-percentage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 100%;
+  background-color: orange;
 }
