@@ -28,9 +28,9 @@ I'm going to keep a list of everything that needs to be done here. For a more de
 - Design button UI ✅
 - Add buttons for UI (Sound / Map / Settings) ✅
 - Add music to game ✅
+- Title screen ✅
 - Add map for users to find their way round
 - Add onboarding section to show users controls
-- Title screen
 
 ### Bugs
 
