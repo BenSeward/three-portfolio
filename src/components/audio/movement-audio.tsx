@@ -33,8 +33,8 @@ export const MovementAudio = ({ status }: Props) => {
       walkingAudio.current.volume = 0;
       runningAudio.current.volume = 0;
     } else {
-      walkingAudio.current.volume = 0.5;
-      runningAudio.current.volume = 0.5;
+      walkingAudio.current.volume = 0.25;
+      runningAudio.current.volume = 0.25;
     }
   }, [volume]);
 
@@ -52,9 +52,11 @@ export const MovementAudio = ({ status }: Props) => {
 
       if (status === "walk") {
         walkingAudio.current.loop = true;
+        walkingAudio.current.playbackRate = 1.75;
         await walkingAudio.current.play();
       } else if (status === "run") {
         runningAudio.current.loop = true;
+        runningAudio.current.playbackRate = 2;
         await runningAudio.current.play();
       }
 
