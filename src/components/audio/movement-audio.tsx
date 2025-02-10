@@ -33,8 +33,8 @@ export const MovementAudio = ({ status }: Props) => {
       walkingAudio.current.volume = 0;
       runningAudio.current.volume = 0;
     } else {
-      walkingAudio.current.volume = 0.25;
-      runningAudio.current.volume = 0.25;
+      walkingAudio.current.volume = 0.5;
+      runningAudio.current.volume = 0.5;
     }
   }, [volume]);
 

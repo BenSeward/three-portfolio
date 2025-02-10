@@ -48,7 +48,7 @@ export const CharacterController = ({ followCharacter }: Props) => {
     }
   );
 
-  const initialPosition = new Vector3(1, -8, -15);
+  const initialPosition = new Vector3(1, -1, -15);
 
   const rb = useRef<any>(null!);
   const container = useRef<any>(null);
