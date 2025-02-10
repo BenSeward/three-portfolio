@@ -27,9 +27,9 @@ export const Experience = () => {
 
       <Physics key={"medieval_village"}>
         <Map
-          scale={0.15}
-          position={[0, -1, 0]}
-          model={`models/medieval_village.glb`}
+          scale={0.5}
+          position={[0, -10, 0]}
+          model={`models/island_town.glb`}
         />
 
         <CharacterController followCharacter={!isIntroScene} />
