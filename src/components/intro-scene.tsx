@@ -14,12 +14,12 @@ export const IntroScene = ({ setIsIntroScene }: Props) => {
 
   useFrame(({ clock, camera }) => {
     const time = clock.getElapsedTime() * 0.15;
-    const radius = 15; // Distance from the center
+    const radius = 35; // Distance from the center
 
     camera.position.x = Math.sin(time) * radius;
-    camera.position.y = 15;
+    camera.position.y = 10;
     camera.position.z = Math.cos(time) * radius;
-    camera.lookAt(0, 0, 0); // Always look at the center
+    camera.lookAt(0, -10, 0); // Always look at the center
   });
 
   const mockLoading = (
