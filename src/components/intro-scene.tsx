@@ -41,7 +41,7 @@ export const IntroScene = ({ setIsIntroScene }: Props) => {
   };
 
   useEffect(() => {
-    mockLoading(setLoadingProgress, 2000);
+    mockLoading(setLoadingProgress, 500);
   }, []);
 
   return (

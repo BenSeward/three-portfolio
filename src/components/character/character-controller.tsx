@@ -48,6 +48,8 @@ export const CharacterController = ({ followCharacter }: Props) => {
     }
   );
 
+  const initialPosition = new Vector3(1, -8, -15);
+
   const rb = useRef<any>(null!);
   const container = useRef<any>(null);
   const character = useRef<any>(null);
@@ -55,13 +57,13 @@ export const CharacterController = ({ followCharacter }: Props) => {
   const cameraTarget = useRef<any>(null);
   const cameraPosition = useRef<any>(null);
   const characterRotationTarget = useRef(0);
-  const cameraLookAtWorldPosition = useRef(new Vector3());
+  const cameraLookAtWorldPosition = useRef(initialPosition);
   const isClicking = useRef(false);
 
   const [animation, setAnimation] = useState("idle");
 
-  const cameraWorldPosition = useRef(new Vector3());
-  const cameraLookAt = useRef(new Vector3());
+  const cameraWorldPosition = useRef(initialPosition);
+  const cameraLookAt = useRef(initialPosition);
   const [, get] = useKeyboardControls();
 
   useEffect(() => {
@@ -178,7 +180,13 @@ export const CharacterController = ({ followCharacter }: Props) => {
     <>
       <Leva hidden />
       <MovementAudio status={animation} />
-      <RigidBody ref={rb} colliders={false} mass={5} lockRotations={true}>
+      <RigidBody
+        ref={rb}
+        colliders={false}
+        mass={5}
+        lockRotations={true}
+        position={initialPosition}
+      >
         <group ref={container}>
           <group ref={cameraTarget} position-z={1} />
           <group ref={cameraPosition} position-y={2} position-z={-2} />

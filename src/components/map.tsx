@@ -42,6 +42,7 @@ export const Map = ({ model, position, scale }: MapProps) => {
         <primitive
           object={scene}
           position={position}
+          rotation={[0, Math.PI, 0]}
           scale={scale}
           ref={group}
         />
