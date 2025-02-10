@@ -92,8 +92,6 @@ export const CharacterController = ({ followCharacter }: Props) => {
   }, []);
 
   useFrame(({ camera, mouse }) => {
-    if (!followCharacter) return;
-
     if (rb.current && character.current) {
       const vel = rb.current.linvel();
 
@@ -157,6 +155,8 @@ export const CharacterController = ({ followCharacter }: Props) => {
 
       rb.current.setLinvel(vel, true);
     }
+
+    if (!followCharacter) return;
 
     // CAMERA
     container.current.rotation.y = MathUtils.lerp(
