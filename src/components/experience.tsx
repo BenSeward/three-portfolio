@@ -3,14 +3,21 @@ import { Physics } from "@react-three/rapier";
 
 import { NPC } from "./npc";
 import { CharacterController } from "./character/character-controller";
-import { Euler, Vector3 } from "three";
+import { Color, Euler, Vector3 } from "three";
 import { Map } from "./map";
 import { BackgroundMusic } from "./audio/background-music";
 import { IntroScene } from "./intro-scene";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useThree } from "@react-three/fiber";
+import Sky from "./sky";
 
 export const Experience = () => {
   const [isIntroScene, setIsIntroScene] = useState(true);
+
+  const { scene } = useThree();
+  useEffect(() => {
+    scene.background = new Color("skyblue");
+  }, [scene]);
 
   return (
     <>
@@ -20,19 +27,18 @@ export const Experience = () => {
           <IntroScene setIsIntroScene={() => setIsIntroScene(false)} />
         </>
       )}
+      <Environment preset="city" />
 
-      <Environment preset="sunset" />
+      <Sky />
 
       <BackgroundMusic />
-
       <Physics key={"medieval_village"}>
+        <CharacterController followCharacter={!isIntroScene} />
         <Map
           scale={0.5}
           position={[0, -10, 0]}
-          model={`models/island_town.glb`}
+          model={`models/island_town_2.glb`}
         />
-
-        <CharacterController followCharacter={!isIntroScene} />
 
         <NPC
           position={new Vector3(1.25, 0, 1.5)}

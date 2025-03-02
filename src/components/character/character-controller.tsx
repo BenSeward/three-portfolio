@@ -189,7 +189,7 @@ export const CharacterController = ({ followCharacter }: Props) => {
       >
         <group ref={container}>
           <group ref={cameraTarget} position-z={1} />
-          <group ref={cameraPosition} position-y={2} position-z={-2} />
+          <group ref={cameraPosition} position-y={1} position-z={-2} />
           <group ref={character}>
             <Character scale={0.18} animation={animation} />
           </group>
