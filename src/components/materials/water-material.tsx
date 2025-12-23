@@ -163,7 +163,7 @@ export class WaterMaterial extends THREE.MeshStandardMaterial {
           float objectDepth = texture2D(tDepth, vWorldUV).r;
           objectDepth = linearizeDepth(objectDepth, vProjectionMatrix);
           float fragDepth = linearizeDepth(gl_FragCoord.z, vProjectionMatrix);
-          float depthDiff = 1.0;
+          float depthDiff = calculateDepthDiff(objectDepth, fragDepth, 1.2, uFoamDist);
           
           // random water foam
           float perlinNoise = texture2D(tNoise, noiseUV).r;
@@ -181,7 +181,8 @@ export class WaterMaterial extends THREE.MeshStandardMaterial {
           vec4 waterColor = mix(uDepthDeepColor, uDepthShallowColor, depthDiff);
           vec4 finalColor = waterColor + vec4(surfaceNoise) + vec4(ringColor, 1.0);
 
-          gl_FragColor = vec4(finalColor.rgb, gl_FragColor.a);
+          float n = texture2D(tNoise, vUv).r;
+          gl_FragColor = vec4(vec3(n), 1.0);
         `
       );
     };
