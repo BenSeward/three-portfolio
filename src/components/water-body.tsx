@@ -20,6 +20,17 @@ const WaterBody: React.FC<WaterBodyProps> = ({
   const waterRef = useRef<THREE.Mesh>(null);
   const { gl, camera, scene } = useThree();
 
+  useEffect(() => {
+    const supportsDepth =
+      gl.capabilities.isWebGL2 || gl.extensions.get("WEBGL_depth_texture");
+
+    console.log("Depth texture supported:", supportsDepth);
+    console.log(
+      "WebGL version:",
+      gl.capabilities.isWebGL2 ? "WebGL2" : "WebGL1"
+    );
+  }, [gl]);
+
   // Textures
   const waterSpec = useTexture("/textures/Water_001_SPEC.jpg");
   const waterNoise = useTexture("/textures/PerlinNoise.png");
