@@ -87,6 +87,8 @@ export class WaterMaterial extends THREE.MeshStandardMaterial {
 
       // === Fragment Shader ===
       shader.fragmentShader = /* glsl */ `
+        precision highp float;
+        
         // definitions
         varying vec2 vUv;
         varying vec2 vWorldUV;
