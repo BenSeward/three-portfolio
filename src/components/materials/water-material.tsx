@@ -181,8 +181,7 @@ export class WaterMaterial extends THREE.MeshStandardMaterial {
           vec4 waterColor = mix(uDepthDeepColor, uDepthShallowColor, depthDiff);
           vec4 finalColor = waterColor + vec4(surfaceNoise) + vec4(ringColor, 1.0);
 
-          float n = texture2D(tNoise, vUv).r;
-          gl_FragColor = vec4(vec3(n), 1.0);
+          gl_FragColor *= vec4(finalColor);
         `
       );
     };
