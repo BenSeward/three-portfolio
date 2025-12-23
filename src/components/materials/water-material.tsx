@@ -163,7 +163,7 @@ export class WaterMaterial extends THREE.MeshStandardMaterial {
           float objectDepth = texture2D(tDepth, vWorldUV).r;
           objectDepth = linearizeDepth(objectDepth, vProjectionMatrix);
           float fragDepth = linearizeDepth(gl_FragCoord.z, vProjectionMatrix);
-          float depthDiff = calculateDepthDiff(objectDepth, fragDepth, 1.2, uFoamDist);
+          float depthDiff = 1.0;
           
           // random water foam
           float perlinNoise = texture2D(tNoise, noiseUV).r;
