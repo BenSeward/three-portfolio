@@ -1,5 +1,6 @@
-import { ReactThreeFiber } from "@react-three/fiber";
+import { ReactThreeFiber, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
+import { useRef, useEffect } from "react";
 
 interface WaterMaterialParameters
   extends THREE.MeshStandardMaterialParameters {}
@@ -10,7 +11,7 @@ export class WaterMaterial extends THREE.MeshStandardMaterial {
   constructor(params: WaterMaterialParameters) {
     super(params);
 
-    // Create minimal inline 4x4 noise texture
+    // === Minimal inline noise texture (4x4) ===
     const noiseData = new Uint8Array([
       0, 64, 128, 192, 64, 128, 192, 0, 128, 192, 0, 64, 192, 0, 64, 128,
     ]);
@@ -23,7 +24,7 @@ export class WaterMaterial extends THREE.MeshStandardMaterial {
     noiseTexture.wrapS = noiseTexture.wrapT = THREE.RepeatWrapping;
     noiseTexture.needsUpdate = true;
 
-    // Minimal inline distortion texture (same as noise for testing)
+    // Minimal inline distortion texture (4x4)
     const distortionData = new Uint8Array([
       128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128,
       128,
@@ -40,10 +41,10 @@ export class WaterMaterial extends THREE.MeshStandardMaterial {
     this.onBeforeCompile = (shader) => {
       this._shader = shader;
 
-      // misc
+      // === Uniforms ===
       shader.uniforms.uTime = { value: 0 };
 
-      // depth
+      // Depth colors
       shader.uniforms.uDepthShallowColor = {
         value: new THREE.Vector4(0.325, 0.707, 0.971, 0.725),
       };
@@ -52,19 +53,19 @@ export class WaterMaterial extends THREE.MeshStandardMaterial {
       };
       shader.uniforms.uFoamDist = { value: 0.3 };
 
-      // textures
+      // Screen resolution
       shader.uniforms.uResolution = {
         value: new THREE.Vector2(window.innerWidth, window.innerHeight),
       };
-      shader.uniforms.tDepth = {
-        value: new THREE.DepthTexture(window.innerWidth, window.innerHeight),
-      };
 
-      // Use inline textures for testing
+      // === Textures ===
       shader.uniforms.tNoise = { value: noiseTexture };
       shader.uniforms.tDistortion = { value: distortionTexture };
 
-      // surface noise
+      // Depth texture will be set externally after creating a proper render target
+      shader.uniforms.tDepth = { value: null };
+
+      // Surface noise parameters
       shader.uniforms.uSurfaceDistortionAmount = { value: 0.5 };
       shader.uniforms.uSurfaceNoiseTiling = {
         value: new THREE.Vector2(16.0, 8.0),
@@ -74,7 +75,7 @@ export class WaterMaterial extends THREE.MeshStandardMaterial {
         value: new THREE.Vector2(-0.003, 0.03),
       };
 
-      // water noise rings
+      // Water noise rings
       shader.uniforms.uRingHalfWidth = { value: 0.05 };
       shader.uniforms.uRingThickness = { value: 0.008 };
       shader.uniforms.uRingThreshold = { value: 0.7 };
@@ -83,7 +84,7 @@ export class WaterMaterial extends THREE.MeshStandardMaterial {
 
       // === Vertex Shader ===
       shader.vertexShader = `
-        varying vec2 vUv; 
+        varying vec2 vUv;
         varying vec2 vWorldUV;
         varying vec2 vNoiseUV;
         varying mat4 vProjectionMatrix;
@@ -94,11 +95,9 @@ export class WaterMaterial extends THREE.MeshStandardMaterial {
         "#include <begin_vertex>",
         `
           #include <begin_vertex>
-          
           vUv = uv;
           vNoiseUV = uv * uSurfaceNoiseTiling;
           vProjectionMatrix = projectionMatrix;
-
           gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
           vec3 ndc = gl_Position.xyz / gl_Position.w;
           vWorldUV = ndc.xy * 0.5 + 0.5;
@@ -152,12 +151,10 @@ export class WaterMaterial extends THREE.MeshStandardMaterial {
           float edgeLow = (threshold - halfWidth) - ringThickness;
           float edgeHigh = threshold - halfWidth;
           float ringStart = smoothstep(edgeLow, edgeHigh, bands);
-
           float edgeLow2 = threshold + halfWidth;
           float edgeHigh2 = threshold + halfWidth + ringThickness;
           float ringEnd = smoothstep(edgeLow2, edgeHigh2, bands);
           float ringMask = ringStart - ringEnd;
-
           return mix(vec3(0.0), vec3(transparency), ringMask);
         }
 
@@ -198,35 +195,47 @@ export class WaterMaterial extends THREE.MeshStandardMaterial {
     };
   }
 
+  // === Uniform update functions ===
   updateTime(time: number) {
-    if (this._shader) {
-      this._shader.uniforms.uTime.value = time;
-    }
+    if (this._shader) this._shader.uniforms.uTime.value = time;
   }
-
   updateNoiseTexture(noiseTexture: THREE.Texture) {
-    if (this._shader) {
-      this._shader.uniforms.tNoise.value = noiseTexture;
-    }
+    if (this._shader) this._shader.uniforms.tNoise.value = noiseTexture;
   }
-
   updateDistortionTexture(distortionTexture: THREE.Texture) {
-    if (this._shader) {
+    if (this._shader)
       this._shader.uniforms.tDistortion.value = distortionTexture;
-    }
   }
-
   updateDepthTexture(depthTexture: THREE.DepthTexture) {
-    if (this._shader) {
-      this._shader.uniforms.tDepth.value = depthTexture;
-    }
+    if (this._shader) this._shader.uniforms.tDepth.value = depthTexture;
   }
-
   updateResolution(resolution: THREE.Vector2) {
-    if (this._shader) {
-      this._shader.uniforms.uResolution.value = resolution;
-    }
+    if (this._shader) this._shader.uniforms.uResolution.value = resolution;
   }
+}
+
+// === Hook example to use depth render target in React Three Fiber ===
+export function useWaterDepthTarget(waterMaterial: WaterMaterial) {
+  const { gl, size, scene, camera } = useThree();
+  const renderTargetRef = useRef<THREE.WebGLRenderTarget>();
+
+  useEffect(() => {
+    const rt = new THREE.WebGLRenderTarget(size.width, size.height);
+    rt.depthTexture = new THREE.DepthTexture(size.width, size.height);
+    rt.depthTexture.type = THREE.UnsignedShortType;
+    renderTargetRef.current = rt;
+
+    waterMaterial.updateDepthTexture(rt.depthTexture);
+  }, [size, waterMaterial]);
+
+  useFrame(() => {
+    if (!renderTargetRef.current) return;
+    gl.setRenderTarget(renderTargetRef.current);
+    gl.render(scene, camera);
+    gl.setRenderTarget(null);
+  });
+
+  return renderTargetRef;
 }
 
 // Declare the custom material type for TypeScript
